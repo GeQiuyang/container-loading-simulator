@@ -39,7 +39,7 @@ export default function Home() {
           </CardHeader>
           <CardContent>
             <Button className="w-full" variant="outline" asChild>
-              <Link href="/demo/pipes">进入 3D 视图 →</Link>
+              <Link href="/pipes">进入 3D 视图 →</Link>
             </Button>
           </CardContent>
         </Card>

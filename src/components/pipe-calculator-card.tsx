@@ -45,7 +45,7 @@ export default function PipeCalculatorCard() {
           </p>
         </div>
         <Link
-          href="/demo/pipes"
+          href="/pipes"
           className="rounded bg-primary px-3 py-1.5 text-xs text-primary-foreground hover:opacity-90"
         >
           3D 视图 →
