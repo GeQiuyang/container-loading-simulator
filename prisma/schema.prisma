@@ -1,0 +1,35 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Container {
+  id         String      @id @default(cuid())
+  name       String
+  length     Float       // m
+  width      Float       // m
+  height     Float       // m
+  maxWeight  Float       // kg
+  cargoItems CargoItem[] @relation("ContainerCargoItems")
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+}
+
+model CargoItem {
+  id          String     @id @default(cuid())
+  name        String
+  length      Float      // m
+  width       Float      // m
+  height      Float      // m
+  weight      Float      // kg
+  quantity    Int        @default(1)
+  container   Container? @relation("ContainerCargoItems", fields: [containerId], references: [id])
+  containerId String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  @@index([containerId])
+}
