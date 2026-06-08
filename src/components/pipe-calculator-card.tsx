@@ -5,13 +5,24 @@ import Link from 'next/link';
 import type { PipeParams, ContainerDims, Stats } from '@/components/pipe-stacking-viewer';
 import { computePipeLayout } from '@/components/pipe-stacking-viewer';
 
-const DEFAULT_CONTAINER: ContainerDims = { length: 12.03, width: 2.35, height: 2.38 };
+const CONTAINER_PRESETS: { key: string; label: string; dims: ContainerDims }[] = [
+  { key: '20GP', label: '20GP', dims: { length: 5.90, width: 2.35, height: 2.39 } },
+  { key: '40GP', label: '40GP', dims: { length: 12.03, width: 2.35, height: 2.38 } },
+  { key: '40HQ', label: '40HQ', dims: { length: 12.03, width: 2.35, height: 2.70 } },
+  { key: '45HQ', label: '45HQ', dims: { length: 13.56, width: 2.35, height: 2.70 } },
+];
 
 export default function PipeCalculatorCard() {
   const [od, setOd] = useState(300);
   const [wall, setWall] = useState(5.25);
   const [length, setLength] = useState(3.12);
   const [steelDensity, setSteelDensity] = useState(7850);
+  const [containerKey, setContainerKey] = useState('40GP');
+
+  const container = useMemo(() =>
+    CONTAINER_PRESETS.find(c => c.key === containerKey)!.dims,
+    [containerKey],
+  );
 
   const params: PipeParams = useMemo(() => ({
     od: od / 1000,
@@ -20,14 +31,14 @@ export default function PipeCalculatorCard() {
   }), [od, wall, length]);
 
   const statsInfo = useMemo(() => {
-    const { pipes, stats: baseStats } = computePipeLayout(params, DEFAULT_CONTAINER);
+    const { pipes, stats: baseStats } = computePipeLayout(params, container);
     const radius = params.od / 2;
     const innerRadius = radius - params.wall;
     const steelVol = Math.PI * (radius ** 2 - innerRadius ** 2) * params.length;
     const pipeMass = (steelVol * steelDensity).toFixed(1);
     const totalMass = (steelVol * steelDensity * pipes.length / 1000).toFixed(1);
     return { ...baseStats, pipeMass, totalMass, pipes, density: steelDensity };
-  }, [params, steelDensity]);
+  }, [params, steelDensity, container]);
 
   const presets = [
     { label: '小口径', od: 100, wall: 2, length: 2 },
@@ -39,9 +50,9 @@ export default function PipeCalculatorCard() {
     <div className="rounded-lg border bg-card p-5 space-y-4">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-lg font-semibold">空心导管装载计算</h2>
+          <h2 className="text-lg font-semibold">装载计算</h2>
           <p className="text-xs text-muted-foreground">
-            40GP 集装箱 (12.03×2.35×2.38m) — 六角密堆积算法
+            {containerKey} 集装箱 ({container.length}×{container.width}×{container.height}m) — 六角密堆积算法
           </p>
         </div>
         <Link
@@ -54,6 +65,16 @@ export default function PipeCalculatorCard() {
 
       {/* Inputs */}
       <div className="flex flex-wrap items-end gap-3">
+        <div className="space-y-1">
+          <label className="text-xs text-muted-foreground">集装箱</label>
+          <select value={containerKey} onChange={e => setContainerKey(e.target.value)}
+            className="w-24 rounded border px-2 py-1.5 text-sm font-mono">
+            {CONTAINER_PRESETS.map(c => (
+              <option key={c.key} value={c.key}>{c.label}</option>
+            ))}
+          </select>
+        </div>
+        <span className="pb-1.5 text-muted-foreground text-xs">|</span>
         <div className="space-y-1">
           <label className="text-xs text-muted-foreground">外径 OD (mm)</label>
           <input
