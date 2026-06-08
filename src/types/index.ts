@@ -115,6 +115,10 @@ export const CreateLoadingPlanSchema = LoadingPlanSchema.omit({
 
 export type CreateLoadingPlanInput = z.infer<typeof CreateLoadingPlanSchema>;
 
+/** Form input type — fields with defaults become optional */
+export type CreateLoadingPlanFormData = z.input<typeof CreateLoadingPlanSchema>;
+export type CreateLoadingPlanItemFormData = z.input<typeof CreateLoadingPlanItemSchema>;
+
 export const UpdateLoadingPlanSchema = z.object({
   utilization: z.number().min(0).max(100).optional(),
   weightRate: z.number().min(0).max(100).optional(),

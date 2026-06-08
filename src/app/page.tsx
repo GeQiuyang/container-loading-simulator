@@ -17,6 +17,9 @@ export default function Home() {
           <Button className="w-full" variant="outline" asChild>
             <Link href="/cargo-items">Cargo Item Management</Link>
           </Button>
+          <Button className="w-full" variant="secondary" asChild>
+            <Link href="/loading-plans">Loading Plans</Link>
+          </Button>
         </CardContent>
       </Card>
     </main>
