@@ -6,30 +6,73 @@ datasource db {
   provider = "postgresql"
 }
 
+enum ContainerType {
+  GP20
+  GP40
+  HQ40
+  OPEN_TOP
+  FLAT_RACK
+}
+
 model Container {
-  id         String      @id @default(cuid())
+  id         String        @id @default(cuid())
+  type       ContainerType
   name       String
-  length     Float       // m
-  width      Float       // m
-  height     Float       // m
-  maxWeight  Float       // kg
-  cargoItems CargoItem[] @relation("ContainerCargoItems")
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
+  length     Float         // m
+  width      Float         // m
+  height     Float         // m
+  maxPayload Float         // kg
+  tareWeight Float         // kg
+  loadingPlans LoadingPlan[]
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
 }
 
 model CargoItem {
-  id          String     @id @default(cuid())
-  name        String
-  length      Float      // m
-  width       Float      // m
-  height      Float      // m
-  weight      Float      // kg
-  quantity    Int        @default(1)
-  container   Container? @relation("ContainerCargoItems", fields: [containerId], references: [id])
-  containerId String?
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  id               String             @id @default(cuid())
+  name             String
+  length           Float              // m
+  width            Float              // m
+  height           Float              // m
+  weight           Float              // kg
+  quantity         Int                @default(1)
+  rotatable        Boolean            @default(true)
+  loadingPlanItems LoadingPlanItem[]
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+}
+
+model LoadingPlan {
+  id               String             @id @default(cuid())
+  containerId      String
+  container        Container          @relation(fields: [containerId], references: [id])
+  utilization      Float              // percentage 0-100
+  weightRate       Float              // percentage 0-100
+  centerOfGravityX Float              // m
+  centerOfGravityY Float              // m
+  centerOfGravityZ Float              // m
+  items            LoadingPlanItem[]
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
 
   @@index([containerId])
+}
+
+model LoadingPlanItem {
+  id            String      @id @default(cuid())
+  loadingPlanId String
+  loadingPlan   LoadingPlan @relation(fields: [loadingPlanId], references: [id], onDelete: Cascade)
+  cargoItemId   String
+  cargoItem     CargoItem   @relation(fields: [cargoItemId], references: [id])
+  positionX     Float       // m
+  positionY     Float       // m
+  positionZ     Float       // m
+  rotationX     Float       @default(0) // degrees
+  rotationY     Float       @default(0) // degrees
+  rotationZ     Float       @default(0) // degrees
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@index([loadingPlanId])
+  @@index([cargoItemId])
 }
