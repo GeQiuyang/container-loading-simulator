@@ -59,10 +59,7 @@ export default function PipeStackingPage() {
             40GP 集装箱 (12.03×2.35×2.38m) — 输入导管参数自动计算最大装载量
           </p>
         </div>
-        <div className="flex gap-2">
-          <Link href="/demo" className="rounded border px-3 py-1.5 text-sm hover:bg-muted">返回 Demo</Link>
-          <Link href="/" className="rounded border px-3 py-1.5 text-sm hover:bg-muted">返回首页</Link>
-        </div>
+        <Link href="/" className="rounded border px-3 py-1.5 text-sm hover:bg-muted">返回首页</Link>
       </div>
 
       {/* Formula inputs */}
