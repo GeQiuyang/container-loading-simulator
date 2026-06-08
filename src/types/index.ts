@@ -64,6 +64,9 @@ export const CreateCargoItemSchema = CargoItemSchema.omit({
 
 export type CreateCargoItemInput = z.infer<typeof CreateCargoItemSchema>;
 
+/** Form input type — fields with defaults become optional for form validation */
+export type CreateCargoItemFormData = z.input<typeof CreateCargoItemSchema>;
+
 export const UpdateCargoItemSchema = CreateCargoItemSchema.partial();
 
 export type UpdateCargoItemInput = z.infer<typeof UpdateCargoItemSchema>;
