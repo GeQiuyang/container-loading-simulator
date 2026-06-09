@@ -1,7 +1,6 @@
 'use client';
 
 import { Suspense } from 'react';
-import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';

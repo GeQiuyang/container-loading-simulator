@@ -32,7 +32,7 @@ export default function Home() {
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">空心导管装载 (3D)</CardTitle>
+            <CardTitle className="text-base">装载计算器</CardTitle>
             <CardDescription>
               全屏 3D 视图 — 交互式拖拽、碰撞检测、堆叠调整
             </CardDescription>
