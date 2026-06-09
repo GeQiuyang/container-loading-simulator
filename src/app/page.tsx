@@ -46,6 +46,18 @@ export default function Home() {
 
         <Card>
           <CardHeader>
+            <CardTitle className="text-base">锥底罐体 3D 模型</CardTitle>
+            <CardDescription>圆柱+圆锥+出水口一体成型，带圆角过渡</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full" variant="outline" asChild>
+              <Link href="/vessel">查看模型 →</Link>
+            </Button>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
             <CardTitle className="text-base">Container Management</CardTitle>
             <CardDescription>管理集装箱规格、尺寸及属性</CardDescription>
           </CardHeader>
